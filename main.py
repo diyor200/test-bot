@@ -1,15 +1,19 @@
-import time
+from typing import Union
+from fastapi import FastAPI, Request
+from pydantic import BaseModel
 
-from bottle import run, get
-from TESAT import receiver
+from save_session import start_action
+
+app = FastAPI()
+
+class Data(BaseModel):
+    car_number: str
+    license_code: str
+    license_number: str
 
 
-@get("/")
-def listen():
-    print("received request")
-    receiver()
-    return
-
-
-if __name__ == "__main__":
-    run(host='localhost', port=8080, debug=True)
+@app.post("/")
+async def read_root(req: Request):
+    data = await req.json()
+    msg = await start_action(data)
+    return {"message": msg}

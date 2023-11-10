@@ -1,19 +1,29 @@
 import time
+import pickle
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+
+from fake_useragent import FakeUserAgent
 
 
-def receiver():
-    start_action(initiate="a8bb7b5b-9568-4d6f-a8dc-6b114299f7fc")
+def fake_user_agent():
+    return FakeUserAgent.random
 
 
-def start_action(initiate: str):
-    driver = webdriver.Chrome()
+options = Options()
+options.add_argument(f"user-agent={fake_user_agent()}")
+
+
+def start_action(initiate="a8bb7b5b-9568-4d6f-a8dc-6b114299f7fc"):
+    driver = webdriver.Chrome(options=options)
     driver.start_client()
     driver.implicitly_wait(time_to_wait=1000)
+    driver.get('https://whoer.net/')
+    time.sleep(10)
     url = f"https://openbudget.uz/boards/initiatives/initiative/31/{initiate}"
-    driver.get(url)
+    driver.get(url, )
     for i in range(5):
         time.sleep(2)
         element = driver.find_element(
@@ -25,3 +35,8 @@ def start_action(initiate: str):
         time.sleep(2)
         print(driver.application_cache)
     driver.close()
+    return "success"
+
+
+if __name__ == "__main__":
+    start_action()
