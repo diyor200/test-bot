@@ -39,6 +39,7 @@ def start_action(data: dict):
         driver.add_cookie(cookie)
         print(cookie)
 
+
     driver.refresh()
     time.sleep(0.3)
     driver.get(service)
